@@ -18,7 +18,7 @@ import com.e444er.compose.ui.theme.ComposeTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen() {
+fun Main() {
     val snackBarHostState = remember {
         SnackbarHostState()
     }
@@ -87,13 +87,5 @@ fun MainScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Test() {
-    ComposeTheme {
-        MainScreen()
-    }
-
-}
 
 
