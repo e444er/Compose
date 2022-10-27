@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import com.e444er.compose.test.InstagramProfileCard
 import com.e444er.compose.ui.PostCard
 import com.e444er.compose.ui.theme.ComposeTheme
@@ -17,6 +18,7 @@ import com.e444er.compose.ui.theme.ComposeTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
             ComposeTheme {
                 Box(
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
                         .background(color = MaterialTheme.colors.background)
                         .padding(8.dp)
                 ) {
-                    PostCard()
+                    InstagramProfileCard(viewModel)
                 }
             }
         }

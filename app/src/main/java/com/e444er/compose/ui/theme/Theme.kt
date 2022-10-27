@@ -14,26 +14,27 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Black900,
     secondary = Black900,
 
+    onPrimary = Color.White,
+    onSecondary = Black500,
     background = Color.Black,
     surface = Color.Black,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
     onBackground = Color.White,
-    onSurface = Color.White,
+    onSurface = Color.Green,
 )
 
 @SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
+
     primary = Color.White,
     primaryVariant = Color.White,
     secondary = Color.White,
+    onPrimary = Black900,
+    onSecondary = Black500,
 
     background = Color.White,
     surface = Color.White,
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black,
+    onSurface = Color.Green,
 
 )
 

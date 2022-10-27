@@ -6,25 +6,26 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.e444er.compose.MainViewModel
 import com.e444er.compose.R
-import com.e444er.compose.ui.theme.ComposeTheme
 
 @Composable
-fun InstagramProfileCard() {
+fun InstagramProfileCard(
+    mainViewModel: MainViewModel
+) {
+    val isFollowed = mainViewModel.isFollowing.observeAsState(false)
+
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(
@@ -61,7 +62,28 @@ fun InstagramProfileCard() {
                 UserStatistics("Followers", "436M")
                 UserStatistics("Following", "76")
             }
-            TextInstagram()
+            Column(
+                modifier = Modifier.padding(
+                    start = 12.dp, bottom = 12.dp
+                )
+            ) {
+                Text(
+                    text = "Instagram",
+                    fontSize = 32.sp,
+                    fontFamily = FontFamily.Cursive
+                )
+                Text(
+                    text = "#YourToMake",
+                    fontSize = 14.sp,
+                )
+                Text(
+                    text = "www.facebook.com/emotional_health",
+                    fontSize = 14.sp,
+                )
+                FollowButton(isFollowed = isFollowed.value) {
+                    mainViewModel.changeFollowingStatus()
+                }
+            }
         }
 
     }
@@ -91,48 +113,29 @@ private fun UserStatistics(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCard() {
-    ComposeTheme(
-        darkTheme = false
-    ) {
-        InstagramProfileCard()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewCardDark() {
-    ComposeTheme(
-        darkTheme = true
-    ) {
-        InstagramProfileCard()
-    }
-}
 
 @Composable
-fun TextInstagram() {
-    Column(
-        modifier = Modifier.padding(
-            start = 12.dp, bottom = 12.dp
+private fun FollowButton(
+    isFollowed: Boolean,
+    clicked: () -> Unit
+) {
+    Button(
+        onClick = {
+            clicked()
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (isFollowed) {
+                MaterialTheme.colors.primary.copy(alpha = 0.5f)
+            } else {
+                MaterialTheme.colors.primary
+            }
         )
     ) {
-        Text(
-            text = "Instagram",
-            fontSize = 32.sp,
-            fontFamily = FontFamily.Cursive
-        )
-        Text(
-            text = "#YourToMake",
-            fontSize = 14.sp,
-        )
-        Text(
-            text = "www.facebook.com/emotional_health",
-            fontSize = 14.sp,
-        )
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Follow")
+        val text = if (isFollowed) {
+            "Unfollow"
+        } else {
+            "Follow"
         }
+        Text(text = text)
     }
 }
