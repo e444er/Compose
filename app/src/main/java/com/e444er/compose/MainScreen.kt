@@ -1,7 +1,12 @@
 package com.e444er.compose
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -11,12 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.e444er.compose.domain.FeedPost
 import com.e444er.compose.ui.PostCard
-import com.e444er.compose.ui.theme.ComposeTheme
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(mainViewModel: MainViewModel) {
 
@@ -53,22 +56,56 @@ fun MainScreen(mainViewModel: MainViewModel) {
             }
         }
     ) {
-        val feedPost = mainViewModel.feedPost.observeAsState(FeedPost())
-        PostCard(
-            modifier = Modifier.padding(8.dp),
-            feedPost = feedPost.value,
-            onCommentClick = mainViewModel::updateCount,
+        val feedPost = mainViewModel.feedPosts.observeAsState(listOf())
 
-            onLikeClick = mainViewModel::updateCount,
+        LazyColumn(
+            modifier = Modifier.padding(it),
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                start = 8.dp,
+                end = 8.dp,
+                bottom = 72.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(
+                items = feedPost.value,
+                key = { it.id }
+            ) { feedPost ->
+                val dismissState = rememberDismissState()
+                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    mainViewModel.remove(feedPost)
+                }
+                SwipeToDismiss(
+                    modifier = Modifier.animateItemPlacement(
+                    ),
+                    state = dismissState,
+                    background = {},
+                    directions = setOf(DismissDirection.EndToStart)
+                ) {
+                    PostCard(
+                        feedPost = feedPost,
+                        onCommentClick = { statisticItem ->
+                            mainViewModel.updateCount(feedPost, statisticItem)
+                        },
 
-            onShareClick = {
-                mainViewModel.updateCount(it)
-            },
+                        onLikeClick = { statisticItem ->
+                            mainViewModel.updateCount(feedPost, statisticItem)
+                        },
 
-            onViewsClick = {
-                mainViewModel.updateCount(it)
+                        onShareClick = { statisticItem ->
+                            mainViewModel.updateCount(feedPost, statisticItem)
+                        },
+
+                        onViewsClick = { statisticItem ->
+                            mainViewModel.updateCount(feedPost, statisticItem)
+                        },
+                    )
+                }
+
             }
-        )
+        }
+
     }
 }
 
