@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,11 +18,7 @@ import com.e444er.compose.ui.PostCard
 import com.e444er.compose.ui.theme.ComposeTheme
 
 @Composable
-fun MainScreen() {
-
-    val feedPost = remember {
-        mutableStateOf(FeedPost())
-    }
+fun MainScreen(mainViewModel: MainViewModel) {
 
     Scaffold(
         bottomBar = {
@@ -56,31 +53,22 @@ fun MainScreen() {
             }
         }
     ) {
+        val feedPost = mainViewModel.feedPost.observeAsState(FeedPost())
         PostCard(
             modifier = Modifier.padding(8.dp),
             feedPost = feedPost.value,
-            onStatisticClick = { newItem ->
-                val oldStatistics = feedPost.value.statistics
-                val newStatistics = oldStatistics.toMutableList().apply {
-                    replaceAll { oldItem ->
-                        if (oldItem.type == newItem.type) {
-                            oldItem.copy(count = oldItem.count + 1)
-                        } else {
-                            oldItem
-                        }
-                    }
-                }
-                feedPost.value = feedPost.value.copy(statistics = newStatistics)
+            onCommentClick = mainViewModel::updateCount,
+
+            onLikeClick = mainViewModel::updateCount,
+
+            onShareClick = {
+                mainViewModel.updateCount(it)
+            },
+
+            onViewsClick = {
+                mainViewModel.updateCount(it)
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Test() {
-    ComposeTheme {
-        MainScreen()
     }
 }
 
