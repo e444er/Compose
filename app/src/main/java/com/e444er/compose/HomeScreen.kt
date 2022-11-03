@@ -1,5 +1,6 @@
 package com.e444er.compose
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,16 +15,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.e444er.compose.domain.FeedPost
 import com.e444er.compose.ui.PostCard
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     mainViewModel: MainViewModel,
     paddingValues: PaddingValues
 ) {
-    val feedPost = mainViewModel.feedPosts.observeAsState(listOf())
+    val screenState = mainViewModel.screenState.observeAsState(HomeScreenState.Initial)
 
+    when (val currentState = screenState.value) {
+        is HomeScreenState.Posts -> {
+            FeedPosts(
+                posts = currentState.posts,
+                mainViewModel = mainViewModel,
+                paddingValues = paddingValues
+            )
+        }
+        is HomeScreenState.Comments -> {
+            CommentsScreen(
+                feedPost = currentState.feedPost,
+                comments = currentState.comments,
+                onBackPressed = {
+                    mainViewModel.closeComment()
+                }
+            )
+            BackHandler {
+                mainViewModel.closeComment()
+            }
+        }
+        HomeScreenState.Initial -> {
+
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@Composable
+private fun FeedPosts(
+    posts: List<FeedPost>,
+    mainViewModel: MainViewModel,
+    paddingValues: PaddingValues
+) {
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
         contentPadding = PaddingValues(
@@ -35,7 +70,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
-            items = feedPost.value,
+            items = posts,
             key = { it.id }
         ) { feedPost ->
             val dismissState = rememberDismissState()
@@ -51,8 +86,8 @@ fun HomeScreen(
             ) {
                 PostCard(
                     feedPost = feedPost,
-                    onCommentClick = { statisticItem ->
-                        mainViewModel.updateCount(feedPost, statisticItem)
+                    onCommentClick = {
+                        mainViewModel.showComments(feedPost)
                     },
 
                     onLikeClick = { statisticItem ->
