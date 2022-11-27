@@ -16,9 +16,6 @@ import coil.compose.AsyncImage
 @Composable
 fun ActivityResultTest() {
 
-
-    val vkId = 51488232
-
     var imageUri by remember {
         mutableStateOf(Uri.EMPTY)
     }
