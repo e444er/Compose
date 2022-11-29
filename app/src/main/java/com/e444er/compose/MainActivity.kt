@@ -5,15 +5,19 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.e444er.compose.ui.theme.ComposeTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
+import com.vk.api.sdk.auth.VKScope
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
@@ -22,32 +26,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeTheme {
-                val someState = remember {
-                    mutableStateOf(true)
-                }
+                val viewModel: MainViewModel = viewModel()
+                val authState = viewModel.authState.observeAsState(AuthState.Initial)
 
-                Log.d("MainActivity", "Recomposition: ${someState.value}")
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()
                 ) {
-                    when (it) {
-                        is VKAuthenticationResult.Success -> {
-                            Log.d("MainActivity", "Success auth")
-                        }
-                        is VKAuthenticationResult.Failed -> {
-                            Log.d("MainActivity", "Failed auth")
+
+                    viewModel.performAuthResult(it)
+                }
+                when(authState.value){
+                    is AuthState.Authorized -> {
+                        MainScreen()
+                    }
+                    is AuthState.NoAuthorized -> {
+                        LoginScreen {
+                            launcher.launch(listOf(VKScope.WALL))
                         }
                     }
-                }
-                LaunchedEffect(key1 = someState.value) {
-                    Log.d("MainActivity", "LaunchedEffect")
-                    delay(100)
-                }
-                SideEffect {
-                    Log.d("MainActivity", "SideEffect")
-                }
-                Button(onClick = { someState.value = !someState.value }) {
-                    Text(text = "Change state")
+                    else -> {
+
+                    }
                 }
             }
         }
