@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.samples
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

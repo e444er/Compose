@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

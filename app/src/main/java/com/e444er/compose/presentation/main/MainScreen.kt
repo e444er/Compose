@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.*
@@ -11,6 +11,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.e444er.compose.navigation.AppNavGraph
 import com.e444er.compose.navigation.rememberNavigationState
+import com.e444er.compose.presentation.comments.CommentsScreen
+import com.e444er.compose.presentation.news.NewsFeedScreen
 
 @Composable
 fun MainScreen() {
@@ -61,7 +63,7 @@ fun MainScreen() {
             navHostController = navigationState.navHostController,
             newsScreenContent = {
 
-                HomeScreen(
+                NewsFeedScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         navigationState.navigateToComments(it)

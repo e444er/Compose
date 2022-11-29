@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.news
 
 import com.e444er.compose.domain.FeedPost
 

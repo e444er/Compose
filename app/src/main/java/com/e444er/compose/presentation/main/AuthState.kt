@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.main
 
 sealed class AuthState {
 

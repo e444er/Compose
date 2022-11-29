@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.samples
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

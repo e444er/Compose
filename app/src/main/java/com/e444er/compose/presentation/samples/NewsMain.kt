@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.samples
 
 import android.util.Log
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,9 +12,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.e444er.compose.ui.theme.ComposeTheme
+import com.e444er.compose.presentation.main.NavigationItem
 import kotlinx.coroutines.launch
 
 @Composable

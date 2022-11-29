@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

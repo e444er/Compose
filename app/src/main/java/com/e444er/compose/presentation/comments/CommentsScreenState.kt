@@ -1,4 +1,4 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.comments
 
 import com.e444er.compose.domain.FeedPost
 import com.e444er.compose.domain.PostComment

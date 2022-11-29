@@ -1,4 +1,4 @@
-package com.e444er.compose.ui
+package com.e444er.compose.presentation.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

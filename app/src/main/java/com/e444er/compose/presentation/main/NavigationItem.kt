@@ -1,10 +1,11 @@
-package com.e444er.compose
+package com.e444er.compose.presentation.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.e444er.compose.R
 import com.e444er.compose.navigation.Screen
 
 sealed class NavigationItem(
